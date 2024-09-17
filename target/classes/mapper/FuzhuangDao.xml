@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.FuzhuangDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.fuzhuang_name as fuzhuangName
+        ,a.fuzhuang_photo as fuzhuangPhoto
+        ,a.fuzhuang_types as fuzhuangTypes
+        ,a.fuzhuang_kucun_number as fuzhuangKucunNumber
+        ,a.fuzhuang_price as fuzhuangPrice
+        ,a.fuzhuang_old_money as fuzhuangOldMoney
+        ,a.fuzhuang_new_money as fuzhuangNewMoney
+        ,a.fuzhuang_clicknum as fuzhuangClicknum
+        ,a.fuzhuang_content as fuzhuangContent
+        ,a.shangxia_types as shangxiaTypes
+        ,a.fuzhuang_delete as fuzhuangDelete
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.FuzhuangView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM fuzhuang  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.fuzhuangName != '' and params.fuzhuangName != null and params.fuzhuangName != 'null' ">
+                and a.fuzhuang_name like CONCAT('%',#{params.fuzhuangName},'%')
+            </if>
+            <if test="params.fuzhuangTypes != null and params.fuzhuangTypes != ''">
+                and a.fuzhuang_types = #{params.fuzhuangTypes}
+            </if>
+            <if test="params.fuzhuangKucunNumberStart != null and params.fuzhuangKucunNumberStart != ''">
+                <![CDATA[  and a.fuzhuang_kucun_number >= #{params.fuzhuangKucunNumberStart}   ]]>
+            </if>
+            <if test="params.fuzhuangKucunNumberEnd != null and params.fuzhuangKucunNumberEnd != ''">
+                <![CDATA[  and a.fuzhuang_kucun_number <= #{params.fuzhuangKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.fuzhuangKucunNumber != null and params.fuzhuangKucunNumber != ''">
+                and a.fuzhuang_kucun_number = #{params.fuzhuangKucunNumber}
+             </if>
+            <if test="params.fuzhuangPriceStart != null and params.fuzhuangPriceStart != ''">
+                <![CDATA[  and a.fuzhuang_price >= #{params.fuzhuangPriceStart}   ]]>
+            </if>
+            <if test="params.fuzhuangPriceEnd != null and params.fuzhuangPriceEnd != ''">
+                <![CDATA[  and a.fuzhuang_price <= #{params.fuzhuangPriceEnd}   ]]>
+            </if>
+             <if test="params.fuzhuangPrice != null and params.fuzhuangPrice != ''">
+                and a.fuzhuang_price = #{params.fuzhuangPrice}
+             </if>
+            <if test="params.fuzhuangOldMoneyStart != null ">
+                <![CDATA[  and a.fuzhuang_old_money >= #{params.fuzhuangOldMoneyStart}   ]]>
+            </if>
+            <if test="params.fuzhuangOldMoneyEnd != null ">
+                <![CDATA[  and a.fuzhuang_old_money <= #{params.fuzhuangOldMoneyEnd}   ]]>
+            </if>
+            <if test="params.fuzhuangNewMoneyStart != null ">
+                <![CDATA[  and a.fuzhuang_new_money >= #{params.fuzhuangNewMoneyStart}   ]]>
+            </if>
+            <if test="params.fuzhuangNewMoneyEnd != null ">
+                <![CDATA[  and a.fuzhuang_new_money <= #{params.fuzhuangNewMoneyEnd}   ]]>
+            </if>
+            <if test="params.fuzhuangClicknumStart != null and params.fuzhuangClicknumStart != ''">
+                <![CDATA[  and a.fuzhuang_clicknum >= #{params.fuzhuangClicknumStart}   ]]>
+            </if>
+            <if test="params.fuzhuangClicknumEnd != null and params.fuzhuangClicknumEnd != ''">
+                <![CDATA[  and a.fuzhuang_clicknum <= #{params.fuzhuangClicknumEnd}   ]]>
+            </if>
+             <if test="params.fuzhuangClicknum != null and params.fuzhuangClicknum != ''">
+                and a.fuzhuang_clicknum = #{params.fuzhuangClicknum}
+             </if>
+            <if test=" params.fuzhuangContent != '' and params.fuzhuangContent != null and params.fuzhuangContent != 'null' ">
+                and a.fuzhuang_content like CONCAT('%',#{params.fuzhuangContent},'%')
+            </if>
+            <if test="params.shangxiaTypes != null and params.shangxiaTypes != ''">
+                and a.shangxia_types = #{params.shangxiaTypes}
+            </if>
+            <if test="params.fuzhuangDeleteStart != null and params.fuzhuangDeleteStart != ''">
+                <![CDATA[  and a.fuzhuang_delete >= #{params.fuzhuangDeleteStart}   ]]>
+            </if>
+            <if test="params.fuzhuangDeleteEnd != null and params.fuzhuangDeleteEnd != ''">
+                <![CDATA[  and a.fuzhuang_delete <= #{params.fuzhuangDeleteEnd}   ]]>
+            </if>
+             <if test="params.fuzhuangDelete != null and params.fuzhuangDelete != ''">
+                and a.fuzhuang_delete = #{params.fuzhuangDelete}
+             </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
